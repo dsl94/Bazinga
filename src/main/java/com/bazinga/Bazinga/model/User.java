@@ -37,7 +37,7 @@ public class User {
     private List<UserSkills> userSkills;
 
     @OneToMany
-    private List<UserExperience> userExperiences;
+    private List<Experience> experiences;
 
     @OneToMany
     private List<UserEducation> userEducations;

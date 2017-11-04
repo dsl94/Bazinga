@@ -20,11 +20,12 @@ public class Experience {
     @GeneratedValue(strategy = GenerationType.AUTO)
     Long experienceId;
     String companyName;
-    String companyRole;
+    String roleInCompany;
     LocalDateTime startDate;
     LocalDateTime endDate;
 
-    @OneToMany
-    private List<UserExperience> userExperiences;
+    @ManyToOne
+    @JoinColumn(name="user_id", nullable=false)
+    private User user;
 
 }
