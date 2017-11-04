@@ -41,4 +41,9 @@ public class User {
 
     @OneToMany
     private List<UserEducation> userEducations;
+
+    @OneToMany
+    private List<Offer> offers;
+
+
 }
