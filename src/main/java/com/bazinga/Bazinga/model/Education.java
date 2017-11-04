@@ -23,6 +23,6 @@ public class Education {
     private LocalDate startDate;
     private LocalDate endDate;
 
-    @ManyToOne
+    @OneToMany
     private List<UserEducation> userEducations;
 }
