@@ -23,7 +23,7 @@ public class UserMapper {
         user.setUsername(request.getUsername());
         user.setEmail(request.getEmail());
         user.setName(request.getName());
-        user.setPassword(request.getPassword());
+        user.setPassword(encoder.encode(request.getPassword()));
         Set<Authority> authorities = new HashSet<>();
         if (request.getAuthority().equalsIgnoreCase("CANDIDATE")){
             Authority authority = new Authority();
