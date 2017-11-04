@@ -52,7 +52,7 @@ public class User {
     @OneToOne(mappedBy = "user")
     private Education education;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
     private List<Offer> offers;
 
 
