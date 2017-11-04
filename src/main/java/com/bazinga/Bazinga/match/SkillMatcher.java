@@ -17,6 +17,7 @@ public class SkillMatcher {
         int offerSkillNumber = offer.getSkills().size();
         Set<Skill> offerSkills = offer.getSkills();
         Set<Skill> matchedSkills = new HashSet<>();
+
         for(Skill userSkill : user.getUserSkills()){
             if(offerSkills.contains(userSkill)){
                 matchedSkills.add(userSkill);
@@ -25,7 +26,7 @@ public class SkillMatcher {
 
         SkillMatcherResponse skillMatcherResponse = new SkillMatcherResponse();
         skillMatcherResponse.setMatchedSkills(matchedSkills);
-        skillMatcherResponse.setMatchedPercentage((double)offerSkills.size() / 100 * matchedSkills.size());
+        skillMatcherResponse.setMatchedPercentage((double)offerSkillNumber / 100 * matchedSkills.size());
 
         return skillMatcherResponse;
     }
