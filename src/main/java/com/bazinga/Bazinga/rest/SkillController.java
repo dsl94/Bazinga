@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
  * Created by lazap on 11/4/2017.
  */
 @RestController
-@RequestMapping(value = "/skill")
+@RequestMapping(value = "/api/skill")
 public class SkillController extends BaseController {
 
     @Autowired
