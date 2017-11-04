@@ -96,8 +96,8 @@ public class UserServiceImpl implements UserService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
         User user = userRepository.findByUsernameIgnoreCase(username);
-        user.getExperiences().clear();
         if(user != null){
+            user.getExperiences().clear();
             for(RequestExperienceDTO experienceDTO : userExperiences){
                 Experience experience = experienceMapper.mapFromRequest(experienceDTO);
                 experienceRepository.save(experience);
