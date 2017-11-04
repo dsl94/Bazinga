@@ -18,6 +18,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityManager;
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
@@ -84,12 +86,14 @@ public class UserServiceImpl implements UserService {
         if(user != null){
             for(RequestExperienceDTO experienceDTO : userExperiences){
                 Experience experience = experienceMapper.mapFromRequest(experienceDTO);
-                experience.setUser(user);
                 experienceRepository.save(experience);
+                user.getExperiences().add(experience);
             }
+            userRepository.save(user);
         } else {
             throw new UserException(ErrorCode.USER_NOT_FOUND, "User not found");
         }
+
         return getCandidateProfile();
     }
 }
