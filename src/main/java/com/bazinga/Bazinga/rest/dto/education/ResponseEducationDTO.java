@@ -13,6 +13,6 @@ import java.time.LocalDate;
 public class ResponseEducationDTO {
     private Long id;
     private String school;
-    private LocalDate startDate;
-    private LocalDate endDate;
+    private String startDate;
+    private String endDate;
 }

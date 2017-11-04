@@ -16,6 +16,6 @@ public class ResponseExperienceDTO {
     private Long id;
     private String companyName;
     private String roleInCompany;
-    private LocalDate startDate;
-    private LocalDate endDate;
+    private String startDate;
+    private String endDate;
 }

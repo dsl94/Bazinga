@@ -28,8 +28,8 @@ public class ExperienceMapper {
         responseExperienceDTO.setId(experience.getId());
         responseExperienceDTO.setCompanyName(experience.getCompanyName());
         responseExperienceDTO.setRoleInCompany(experience.getRoleInCompany());
-        responseExperienceDTO.setStartDate(experience.getStartDate());
-        responseExperienceDTO.setEndDate(experience.getEndDate());
+        responseExperienceDTO.setStartDate(experience.getStartDate().toString());
+        responseExperienceDTO.setEndDate(experience.getEndDate().toString());
 
         return responseExperienceDTO;
     }
