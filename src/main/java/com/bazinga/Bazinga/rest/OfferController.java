@@ -7,12 +7,10 @@ import com.bazinga.Bazinga.service.OfferService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.websocket.server.PathParam;
 
 @RestController
 @RequestMapping("/api/company")
@@ -34,6 +32,15 @@ public class OfferController {
     public ResponseEntity getComapniesOffers() {
         try {
             return ResponseEntity.ok(offerService.getCompaniesOffers());
+        } catch (OfferException e) {
+            return ResponseEntity.badRequest().body(new ErrorMessage(e.getErrorCode(), e.getErrorMessage()));
+        }
+    }
+
+    @RequestMapping(value = "/offer/{id}", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity updateOffer(@Valid @RequestBody CreateOfferRequestDTO requestDTO, @PathVariable(value = "id") Long id) {
+        try {
+            return ResponseEntity.ok(offerService.updateOffer(requestDTO, id));
         } catch (OfferException e) {
             return ResponseEntity.badRequest().body(new ErrorMessage(e.getErrorCode(), e.getErrorMessage()));
         }
