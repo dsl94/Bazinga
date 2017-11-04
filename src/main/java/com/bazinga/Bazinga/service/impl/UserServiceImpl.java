@@ -94,6 +94,12 @@ public class UserServiceImpl implements UserService {
             for (Experience experience : user.getExperiences()){
                 responseExperienceDTOs.add(experienceMapper.mapFromEntity(experience));
             }
+            List<String> locations = new ArrayList<>();
+            for(String location : user.getLocations().split(",")){
+                locations.add(location);
+            }
+            profileDTO.setLocations(locations);
+
             profileDTO.setUserExperience(responseExperienceDTOs);
 
             return profileDTO;
