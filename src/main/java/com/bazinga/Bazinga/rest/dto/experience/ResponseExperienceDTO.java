@@ -3,6 +3,7 @@ package com.bazinga.Bazinga.rest.dto.experience;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 /**
@@ -15,6 +16,6 @@ public class ResponseExperienceDTO {
     private Long id;
     private String companyName;
     private String roleInCompany;
-    private LocalDateTime startDate;
-    private LocalDateTime endDate;
+    private LocalDate startDate;
+    private LocalDate endDate;
 }

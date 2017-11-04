@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -21,11 +22,7 @@ public class Experience {
     Long id;
     String companyName;
     String roleInCompany;
-    LocalDateTime startDate;
-    LocalDateTime endDate;
-
-    @ManyToOne
-    @JoinColumn(name="user_id", nullable=false)
-    private User user;
+    LocalDate startDate;
+    LocalDate endDate;
 
 }
