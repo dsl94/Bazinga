@@ -33,6 +33,6 @@ public class User {
     @BatchSize(size = 20)
     private Set<Authority> authorities = new HashSet<>();
 
-    @ManyToOne
+    @OneToMany
     private List<UserSkills> userSkills;
 }

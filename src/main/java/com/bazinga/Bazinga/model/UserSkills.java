@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+
 /**
  * Created by lazap on 11/4/2017.
  */
