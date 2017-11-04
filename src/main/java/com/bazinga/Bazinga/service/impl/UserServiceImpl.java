@@ -4,11 +4,14 @@ import com.bazinga.Bazinga.error.ErrorCode;
 import com.bazinga.Bazinga.error.UserException;
 import com.bazinga.Bazinga.model.User;
 import com.bazinga.Bazinga.repository.UserRepository;
+import com.bazinga.Bazinga.rest.dto.user.CandidateProfileDTO;
 import com.bazinga.Bazinga.rest.dto.user.RegisterUserDTO;
 import com.bazinga.Bazinga.rest.dto.user.RegisterUserResponseDTO;
 import com.bazinga.Bazinga.service.UserService;
 import com.bazinga.Bazinga.util.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -38,5 +41,29 @@ public class UserServiceImpl implements UserService {
         User result = userRepository.save(forSave);
 
         return userMapper.mapRegisterResponseFromEntity(result);
+    }
+
+    @Override
+    public CandidateProfileDTO getCandidateProfile() throws UserException {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+
+        // First do validation
+        // Check if user exist
+        User user = userRepository.findByUsernameIgnoreCase(username);
+        if (user != null){
+            CandidateProfileDTO profileDTO = new CandidateProfileDTO();
+            profileDTO.setId(user.getId());
+            profileDTO.setEmail(user.getEmail());
+            profileDTO.setName(user.getName());
+            profileDTO.setUsername(user.getUsername());
+            profileDTO.setUserSkills(user.getUserSkills());
+            profileDTO.setUserEducation(user.getEducation());
+            profileDTO.setUserExperience(user.getExperiences());
+
+            return profileDTO;
+        } else {
+            throw new UserException(ErrorCode.USER_NOT_FOUND, "User not found");
+        }
     }
 }

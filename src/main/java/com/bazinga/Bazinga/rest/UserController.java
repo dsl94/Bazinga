@@ -30,8 +30,13 @@ public class UserController {
         }
     }
 
-    @RequestMapping(value = "/candidate/profile/{id}")
+    @RequestMapping(value = "/candidate/profile")
     private ResponseEntity getCandidateProfile(@PathParam(value = "id") Long id){
-        return null;
+
+        try {
+            return ResponseEntity.ok(userService.getCandidateProfile());
+        } catch (UserException e) {
+            return ResponseEntity.badRequest().body(new ErrorMessage(e.getErrorCode(), e.getErrorMessage()));
+        }
     }
 }
