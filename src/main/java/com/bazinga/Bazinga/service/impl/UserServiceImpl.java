@@ -88,7 +88,8 @@ public class UserServiceImpl implements UserService {
             profileDTO.setName(user.getName());
             profileDTO.setUsername(user.getUsername());
             profileDTO.setUserSkills(user.getUserSkills());
-            profileDTO.setUserEducation(educationMapper.mapResponseToDTO(user.getEducation()));
+            if(user.getEducation() != null)
+                profileDTO.setUserEducation(educationMapper.mapResponseToDTO(user.getEducation()));
             Set<ResponseExperienceDTO> responseExperienceDTOs=new HashSet<>();
             for (Experience experience:user.getExperiences()){
                 responseExperienceDTOs.add(experienceMapper.mapFromEntity(experience));
