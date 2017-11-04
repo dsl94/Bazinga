@@ -38,4 +38,7 @@ public class User {
 
     @OneToMany
     private List<UserExperience> userExperiences;
+
+    @OneToMany
+    private List<UserEducation> userEducations;
 }
