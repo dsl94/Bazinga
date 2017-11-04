@@ -20,11 +20,15 @@ public class Offer {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    private String title;
     private Boolean active;
     @ManyToOne
     @JoinColumn(name="user_id", nullable=false)
     private User user;
     private String locations;
+    private String description;
+    private EducationLevel minimumLevel;
+    private Integer minYearsOfExperience;
 
     @JsonIgnore
     @ManyToMany(fetch = FetchType.EAGER)
