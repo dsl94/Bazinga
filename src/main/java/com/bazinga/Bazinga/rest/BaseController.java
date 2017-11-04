@@ -17,4 +17,8 @@ public abstract class BaseController {
     protected ResponseEntity response(){
         return ResponseEntity.ok().build();
     }
+
+    protected ResponseEntity responseBad(Object object) {
+        return ResponseEntity.badRequest().body(object);
+    }
 }
