@@ -3,16 +3,20 @@ package com.bazinga.Bazinga.service.impl;
 import com.bazinga.Bazinga.error.ErrorCode;
 import com.bazinga.Bazinga.error.OfferException;
 import com.bazinga.Bazinga.error.UserException;
+import com.bazinga.Bazinga.model.Experience;
 import com.bazinga.Bazinga.model.Authority;
 import com.bazinga.Bazinga.model.Skill;
 import com.bazinga.Bazinga.model.User;
+import com.bazinga.Bazinga.repository.ExperienceRepository;
 import com.bazinga.Bazinga.repository.SkillRepository;
 import com.bazinga.Bazinga.repository.UserRepository;
+import com.bazinga.Bazinga.rest.dto.experience.RequestExperienceDTO;
 import com.bazinga.Bazinga.rest.dto.user.CandidateProfileDTO;
 import com.bazinga.Bazinga.rest.dto.user.RegisterUserDTO;
 import com.bazinga.Bazinga.rest.dto.user.RegisterUserResponseDTO;
 import com.bazinga.Bazinga.security.AuthoritiesConstants;
 import com.bazinga.Bazinga.service.UserService;
+import com.bazinga.Bazinga.util.ExperienceMapper;
 import com.bazinga.Bazinga.util.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -31,7 +35,13 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
 
     @Autowired
+    private ExperienceRepository experienceRepository;
+
+    @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private ExperienceMapper experienceMapper;
 
     @Autowired
     private SkillRepository skillRepository;
@@ -75,6 +85,23 @@ public class UserServiceImpl implements UserService {
         } else {
             throw new UserException(ErrorCode.USER_NOT_FOUND, "User not found");
         }
+    }
+
+    @Override
+    public CandidateProfileDTO addExperiences(List<RequestExperienceDTO> userExperiences) throws UserException {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        User user = userRepository.findByUsernameIgnoreCase(username);
+        if(user != null){
+            for(RequestExperienceDTO experienceDTO : userExperiences){
+                Experience experience = experienceMapper.mapFromRequest(experienceDTO);
+                experience.setUser(user);
+                experienceRepository.save(experience);
+            }
+        } else {
+            throw new UserException(ErrorCode.USER_NOT_FOUND, "User not found");
+        }
+        return getCandidateProfile();
     }
 
     @Override

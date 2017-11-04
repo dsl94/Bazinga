@@ -4,11 +4,13 @@ import com.bazinga.Bazinga.error.ErrorMessage;
 import com.bazinga.Bazinga.error.OfferException;
 import com.bazinga.Bazinga.error.UserException;
 import com.bazinga.Bazinga.rest.dto.user.CandidateProfileDTO;
+import com.bazinga.Bazinga.rest.dto.experience.RequestExperienceDTO;
 import com.bazinga.Bazinga.rest.dto.user.RegisterUserDTO;
 import com.bazinga.Bazinga.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.method.P;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -17,7 +19,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api")
-public class UserController {
+public class UserController extends BaseController{
 
     @Autowired
     private UserService userService;
@@ -50,5 +52,14 @@ public class UserController {
             return ResponseEntity.badRequest().body(new ErrorMessage(e.getErrorCode(), e.getErrorMessage()));
         }
 
+    }
+
+    @RequestMapping(value = "/candidate/experiences", method = RequestMethod.POST)
+    private ResponseEntity addExperiences(@RequestBody List<RequestExperienceDTO> experiences){
+        try {
+            return response(userService.addExperiences(experiences));
+        } catch (UserException e) {
+            return responseBad(new ErrorMessage(e.getErrorCode(), e.getErrorMessage()));
+        }
     }
 }
