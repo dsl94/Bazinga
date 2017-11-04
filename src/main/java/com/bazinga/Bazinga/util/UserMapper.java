@@ -4,6 +4,7 @@ import com.bazinga.Bazinga.model.Authority;
 import com.bazinga.Bazinga.model.User;
 import com.bazinga.Bazinga.rest.dto.user.RegisterUserDTO;
 import com.bazinga.Bazinga.rest.dto.user.RegisterUserResponseDTO;
+import com.bazinga.Bazinga.rest.dto.user.UserEducationRequestDTO;
 import com.bazinga.Bazinga.security.AuthoritiesConstants;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;

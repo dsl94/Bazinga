@@ -3,6 +3,7 @@ package com.bazinga.Bazinga.rest;
 import com.bazinga.Bazinga.error.ErrorMessage;
 import com.bazinga.Bazinga.error.OfferException;
 import com.bazinga.Bazinga.error.UserException;
+import com.bazinga.Bazinga.rest.dto.education.RequestEducationDTO;
 import com.bazinga.Bazinga.rest.dto.user.CandidateProfileDTO;
 import com.bazinga.Bazinga.rest.dto.experience.RequestExperienceDTO;
 import com.bazinga.Bazinga.rest.dto.user.RegisterUserDTO;
@@ -71,6 +72,15 @@ public class UserController extends BaseController{
             return ResponseEntity.ok().body(userService.addEducation(requestDTO));
         } catch (UserException e) {
             return ResponseEntity.badRequest().body(new ErrorMessage(e.getErrorCode(), e.getErrorMessage()));
+        }
+    }
+
+    @RequestMapping(value = "/candidate/education", method = RequestMethod.PUT)
+    private ResponseEntity updateEducation(@RequestBody RequestEducationDTO requestEducationDTO){
+        try {
+            return response(userService.updateEducation(requestEducationDTO));
+        } catch (UserException e) {
+            return responseBad(new ErrorMessage(e.getErrorCode(), e.getErrorMessage()));
         }
     }
 

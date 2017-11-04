@@ -3,6 +3,7 @@ package com.bazinga.Bazinga.util;
 import com.bazinga.Bazinga.model.Education;
 import com.bazinga.Bazinga.rest.dto.education.RequestEducationDTO;
 import com.bazinga.Bazinga.rest.dto.education.ResponseEducationDTO;
+import com.bazinga.Bazinga.rest.dto.user.UserEducationRequestDTO;
 import org.springframework.stereotype.Component;
 
 /**
@@ -32,5 +33,14 @@ public class EducationMapper {
         }
         responseEducationDTO.setLevel(education.getLevel());
         return responseEducationDTO;
+    }
+
+    public Education mapFromUserEducationRequest(UserEducationRequestDTO userEducationRequestDTO){
+        Education education = new Education();
+        education.setSchool(userEducationRequestDTO.getSchool());
+        education.setStartDate(userEducationRequestDTO.getStartDate());
+        education.setEndDate(userEducationRequestDTO.getEndDate());
+        education.setLevel(userEducationRequestDTO.getLevel());
+        return education;
     }
 }

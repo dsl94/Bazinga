@@ -1,6 +1,7 @@
 package com.bazinga.Bazinga.service;
 
 import com.bazinga.Bazinga.error.UserException;
+import com.bazinga.Bazinga.rest.dto.education.RequestEducationDTO;
 import com.bazinga.Bazinga.rest.dto.experience.RequestExperienceDTO;
 import com.bazinga.Bazinga.rest.dto.user.CandidateProfileDTO;
 import com.bazinga.Bazinga.rest.dto.user.RegisterUserDTO;
@@ -17,4 +18,5 @@ public interface UserService {
     CandidateProfileDTO addEducation(UserEducationRequestDTO request) throws UserException;
     CandidateProfileDTO addExperiences(List<RequestExperienceDTO> userExperiences) throws UserException;
     CandidateProfileDTO addLocations(List<String> locations) throws UserException;
+    CandidateProfileDTO updateEducation(RequestEducationDTO requestEducationDTO) throws UserException;
 }

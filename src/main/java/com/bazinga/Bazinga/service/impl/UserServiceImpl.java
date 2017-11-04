@@ -10,6 +10,7 @@ import com.bazinga.Bazinga.repository.EducationRepository;
 import com.bazinga.Bazinga.repository.ExperienceRepository;
 import com.bazinga.Bazinga.repository.SkillRepository;
 import com.bazinga.Bazinga.repository.UserRepository;
+import com.bazinga.Bazinga.rest.dto.education.RequestEducationDTO;
 import com.bazinga.Bazinga.rest.dto.experience.RequestExperienceDTO;
 import com.bazinga.Bazinga.rest.dto.experience.ResponseExperienceDTO;
 import com.bazinga.Bazinga.rest.dto.user.CandidateProfileDTO;
@@ -138,6 +139,7 @@ public class UserServiceImpl implements UserService {
 
     }
 
+
     @Override
     public CandidateProfileDTO addSkillsToUSer(List<String> skillsRequest) throws UserException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -180,12 +182,10 @@ public class UserServiceImpl implements UserService {
             // Check if user have education
             if (user.getEducation() != null) {
                 throw new UserException(ErrorCode.EDUCATION_EXIST, "User already have education, please edit that one");
+//                user.setEducation(educationMapper.mapFromUserEducationRequest(request));
+//                return getCandidateProfile();
             } else {
-                Education education = new Education();
-                education.setSchool(request.getSchool());
-                education.setEndDate(request.getEndDate());
-                education.setStartDate(request.getStartDate());
-                education.setLevel(request.getLevel());
+                Education education = educationMapper.mapFromUserEducationRequest(request);
                 Education res=educationRepository.save(education);
                 user.setEducation(res);
                 userRepository.save(user);
@@ -195,4 +195,20 @@ public class UserServiceImpl implements UserService {
             throw new UserException(ErrorCode.USER_NOT_FOUND, "User not found");
         }
     }
+
+    @Override
+    public CandidateProfileDTO updateEducation(RequestEducationDTO requestEducationDTO) throws UserException {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        User user = userRepository.findByUsernameIgnoreCase(username);
+
+        if(user != null){
+            user.setEducation(educationMapper.mapRequestToEntity(requestEducationDTO));
+            userRepository.save(user);
+            return getCandidateProfile();
+        } else {
+            throw new UserException(ErrorCode.USER_NOT_FOUND, "User not found");
+        }
+    }
+
 }
