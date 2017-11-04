@@ -1,4 +1,4 @@
-package com.bazinga.Bazinga.rest.dto;
+package com.bazinga.Bazinga.rest;
 
 import com.bazinga.Bazinga.error.ErrorMessage;
 import com.bazinga.Bazinga.error.OfferException;
