@@ -38,6 +38,9 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private ExperienceMapper experienceMapper;
 
+    @Autowired
+    private ExperienceRepository experienceRepository;
+
     @Override
     public RegisterUserResponseDTO register(RegisterUserDTO request) throws UserException {
 
