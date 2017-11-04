@@ -30,11 +30,6 @@ public class EducationController extends BaseController {
         return response(educationService.getOne(id));
     }
 
-    @RequestMapping(method = RequestMethod.POST)
-    private ResponseEntity create(@RequestBody RequestEducationDTO requestEducationDTO){
-        return response(educationService.create(educationMapper.mapRequestToEntity(requestEducationDTO)));
-    }
-
     @RequestMapping(method = RequestMethod.PUT)
     private ResponseEntity update(@RequestBody RequestEducationDTO requestEducationDTO){
         return response(educationService.update(educationMapper.mapRequestToEntity(requestEducationDTO)));

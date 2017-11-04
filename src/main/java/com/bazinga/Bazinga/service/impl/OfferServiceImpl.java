@@ -52,7 +52,7 @@ public class OfferServiceImpl implements OfferService{
         Authority authority = new Authority();
         authority.setName(AuthoritiesConstants.COMPANY);
         if (!user.getAuthorities().contains(authority)) {
-            throw new OfferException(ErrorCode.USER_IS_NOT_CPMPANY, "User is not company and can't create offer");
+            throw new OfferException(ErrorCode.USER_IS_NOT_COMPANY, "User is not company and can't create offer");
         }
 
         Offer forSave = new Offer();

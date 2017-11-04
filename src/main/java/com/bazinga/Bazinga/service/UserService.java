@@ -7,6 +7,8 @@ import com.bazinga.Bazinga.rest.dto.experience.RequestExperienceDTO;
 import com.bazinga.Bazinga.rest.dto.user.CandidateProfileDTO;
 import com.bazinga.Bazinga.rest.dto.user.RegisterUserDTO;
 import com.bazinga.Bazinga.rest.dto.user.RegisterUserResponseDTO;
+import com.bazinga.Bazinga.rest.dto.user.UserEducationRequestDTO;
+import org.omg.PortableInterceptor.USER_EXCEPTION;
 
 import java.util.List;
 
@@ -15,5 +17,6 @@ public interface UserService {
     RegisterUserResponseDTO register(RegisterUserDTO request) throws UserException;
     CandidateProfileDTO addSkillsToUSer(List<String> skills) throws OfferException, UserException;
     CandidateProfileDTO getCandidateProfile() throws UserException;
+    CandidateProfileDTO addEducation(UserEducationRequestDTO request) throws UserException;
     CandidateProfileDTO addExperiences(List<RequestExperienceDTO> userExperiences) throws UserException;
 }

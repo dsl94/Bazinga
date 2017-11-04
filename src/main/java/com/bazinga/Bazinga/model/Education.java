@@ -2,6 +2,7 @@ package com.bazinga.Bazinga.model;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -15,6 +16,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @Table
+@ToString
 public class Education {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO )
@@ -22,7 +24,7 @@ public class Education {
     private String school;
     private LocalDate startDate;
     private LocalDate endDate;
-
+    private EducationLevel level;
     @OneToOne(mappedBy = "education")
     private User user;
 }
