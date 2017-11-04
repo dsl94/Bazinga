@@ -2,14 +2,17 @@ package com.bazinga.Bazinga.service.impl;
 
 import com.bazinga.Bazinga.error.ErrorCode;
 import com.bazinga.Bazinga.error.UserException;
-import com.bazinga.Bazinga.model.Experience;
-import com.bazinga.Bazinga.model.User;
+import com.bazinga.Bazinga.model.*;
+import com.bazinga.Bazinga.repository.EducationRepository;
 import com.bazinga.Bazinga.repository.ExperienceRepository;
+import com.bazinga.Bazinga.repository.SkillRepository;
 import com.bazinga.Bazinga.repository.UserRepository;
 import com.bazinga.Bazinga.rest.dto.experience.RequestExperienceDTO;
 import com.bazinga.Bazinga.rest.dto.user.CandidateProfileDTO;
 import com.bazinga.Bazinga.rest.dto.user.RegisterUserDTO;
 import com.bazinga.Bazinga.rest.dto.user.RegisterUserResponseDTO;
+import com.bazinga.Bazinga.security.AuthoritiesConstants;
+import com.bazinga.Bazinga.rest.dto.user.UserEducationRequestDTO;
 import com.bazinga.Bazinga.service.UserService;
 import com.bazinga.Bazinga.util.ExperienceMapper;
 import com.bazinga.Bazinga.util.UserMapper;
@@ -18,9 +21,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityManager;
-import javax.transaction.Transactional;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -35,7 +39,16 @@ public class UserServiceImpl implements UserService {
     private UserMapper userMapper;
 
     @Autowired
+    private EducationRepository educationRepository;
+
+    @Autowired
     private ExperienceMapper experienceMapper;
+
+    @Autowired
+    private SkillRepository skillRepository;
+
+    @Autowired
+    private ExperienceRepository experienceRepository;
 
     @Override
     public RegisterUserResponseDTO register(RegisterUserDTO request) throws UserException {
@@ -95,5 +108,63 @@ public class UserServiceImpl implements UserService {
         }
 
         return getCandidateProfile();
+    }
+
+    @Override
+    public CandidateProfileDTO addSkillsToUSer(List<String> skillsRequest) throws UserException {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+
+        // First do validation
+        // Check if user exist
+        User user = userRepository.findByUsernameIgnoreCase(username);
+        if (user == null) {
+            throw new UserException(ErrorCode.USER_NOT_FOUND, "User with that id not found");
+        }
+
+
+        Set<Skill> skills=new HashSet<>();
+        for (String skillName:skillsRequest){
+            Skill skill =skillRepository.findByNameIgnoreCase(skillName);
+            if (skill!=null){
+                skills.add(skill);
+            }else{
+                skill = new Skill();
+                skill.setName(skillName);
+                skill = skillRepository.save(skill);
+                skills.add(skill);
+            }
+        }
+
+        user.setUserSkills(skills);
+        userRepository.save(user);
+
+        return getCandidateProfile();
+    }
+
+    @Override
+    public CandidateProfileDTO addEducation(UserEducationRequestDTO request) throws UserException {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+
+        User user = userRepository.findByUsernameIgnoreCase(username);
+        if (user != null) {
+            // Check if user have education
+            if (user.getEducation() != null) {
+                throw new UserException(ErrorCode.EDUCATION_EXIST, "User already have education, please edit that one");
+            } else {
+                Education education = new Education();
+                education.setSchool(request.getSchool());
+                education.setEndDate(request.getEndDate());
+                education.setStartDate(request.getStartDate());
+                education.setLevel(request.getLevel());
+                Education res=educationRepository.save(education);
+                user.setEducation(res);
+                userRepository.save(user);
+                return this.getCandidateProfile();
+            }
+        } else {
+            throw new UserException(ErrorCode.USER_NOT_FOUND, "User not found");
+        }
     }
 }

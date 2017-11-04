@@ -49,8 +49,7 @@ public class User {
     @BatchSize(size = 20)
     private Set<Experience> experiences;
 
-    @OneToOne
-    @JoinColumn(name = "education_id")
+    @OneToOne(mappedBy = "user")
     private Education education;
 
     @OneToMany
