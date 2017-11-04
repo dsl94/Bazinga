@@ -5,12 +5,14 @@ import com.bazinga.Bazinga.repository.SkillRepository;
 import com.bazinga.Bazinga.service.BaseService;
 import com.bazinga.Bazinga.service.SkillService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 /**
  * Created by lazap on 11/4/2017.
  */
+@Service
 public class SkillServiceImpl extends BaseService implements SkillService {
 
     @Autowired
