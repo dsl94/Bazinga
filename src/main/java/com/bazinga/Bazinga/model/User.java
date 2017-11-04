@@ -33,14 +33,25 @@ public class User {
     @BatchSize(size = 20)
     private Set<Authority> authorities = new HashSet<>();
 
-    @OneToMany
-    private List<UserSkills> userSkills;
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "user_skills",
+            joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
+            inverseJoinColumns = {@JoinColumn(name = "skill_id", referencedColumnName = "id")})
+    @BatchSize(size = 20)
+    private Set<Skill> userSkills;
 
-    @OneToMany
-    private List<Experience> experiences;
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "user_experience",
+            joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
+            inverseJoinColumns = {@JoinColumn(name = "experience_id", referencedColumnName = "id")})
+    @BatchSize(size = 20)
+    private Set<Experience> experiences;
 
-    @OneToMany
-    private List<UserEducation> userEducations;
+    @OneToOne
+    @JoinColumn(name = "education_id")
+    private Education education;
 
     @OneToMany
     private List<Offer> offers;

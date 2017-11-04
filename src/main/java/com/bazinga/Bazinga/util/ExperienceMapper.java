@@ -25,7 +25,7 @@ public class ExperienceMapper {
     public ResponseExperienceDTO mapFromEntity(Experience experience){
         ResponseExperienceDTO responseExperienceDTO=new ResponseExperienceDTO();
 
-        responseExperienceDTO.setId(experience.getExperienceId());
+        responseExperienceDTO.setId(experience.getId());
         responseExperienceDTO.setCompanyName(experience.getCompanyName());
         responseExperienceDTO.setRoleInCompany(experience.getRoleInCompany());
         responseExperienceDTO.setStartDate(experience.getStartDate());

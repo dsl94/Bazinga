@@ -23,6 +23,6 @@ public class Education {
     private LocalDate startDate;
     private LocalDate endDate;
 
-    @OneToMany
-    private List<UserEducation> userEducations;
+    @OneToOne(mappedBy = "education")
+    private User user;
 }

@@ -18,7 +18,7 @@ public class Experience {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    Long experienceId;
+    Long id;
     String companyName;
     String roleInCompany;
     LocalDateTime startDate;
