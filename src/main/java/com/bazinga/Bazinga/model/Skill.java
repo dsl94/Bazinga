@@ -19,7 +19,4 @@ public class Skill {
     @GeneratedValue(strategy = GenerationType.AUTO )
     private Long id;
     private String name;
-
-    @OneToMany(mappedBy = "skill")
-    private List<UserSkills> userSkills;
 }
