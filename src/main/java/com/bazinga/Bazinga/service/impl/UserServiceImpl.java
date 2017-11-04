@@ -2,10 +2,8 @@ package com.bazinga.Bazinga.service.impl;
 
 import com.bazinga.Bazinga.error.ErrorCode;
 import com.bazinga.Bazinga.error.UserException;
-import com.bazinga.Bazinga.model.Experience;
-import com.bazinga.Bazinga.model.Authority;
-import com.bazinga.Bazinga.model.Skill;
-import com.bazinga.Bazinga.model.User;
+import com.bazinga.Bazinga.model.*;
+import com.bazinga.Bazinga.repository.EducationRepository;
 import com.bazinga.Bazinga.repository.ExperienceRepository;
 import com.bazinga.Bazinga.repository.SkillRepository;
 import com.bazinga.Bazinga.repository.UserRepository;
@@ -108,7 +106,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public CandidateProfileDTO addSkillsToUSer(List<String> skillsRequest) throws OfferException, UserException {
+    public CandidateProfileDTO addSkillsToUSer(List<String> skillsRequest) throws UserException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
 
@@ -154,10 +152,8 @@ public class UserServiceImpl implements UserService {
                 education.setSchool(request.getSchool());
                 education.setEndDate(request.getEndDate());
                 education.setStartDate(request.getStartDate());
-                education.setUser(user);
                 education.setLevel(request.getLevel());
-
-                Education res = educationRepository.save(education);
+                Education res=educationRepository.save(education);
                 user.setEducation(res);
                 userRepository.save(user);
                 return this.getCandidateProfile();

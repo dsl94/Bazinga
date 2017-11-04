@@ -15,7 +15,7 @@ import java.util.List;
 public interface UserService {
 
     RegisterUserResponseDTO register(RegisterUserDTO request) throws UserException;
-    CandidateProfileDTO addSkillsToUSer(List<String> skills) throws OfferException, UserException;
+    CandidateProfileDTO addSkillsToUSer(List<String> skills) throws  UserException;
     CandidateProfileDTO getCandidateProfile() throws UserException;
     CandidateProfileDTO addEducation(UserEducationRequestDTO request) throws UserException;
     CandidateProfileDTO addExperiences(List<RequestExperienceDTO> userExperiences) throws UserException;
