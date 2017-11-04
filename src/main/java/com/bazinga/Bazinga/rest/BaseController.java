@@ -9,4 +9,12 @@ public abstract class BaseController {
     protected ResponseEntity response(Object object){
         return ResponseEntity.ok(object);
     }
+
+    protected ResponseEntity responseNoContent(){
+        return ResponseEntity.noContent().build();
+    }
+
+    protected ResponseEntity response(){
+        return ResponseEntity.ok().build();
+    }
 }
