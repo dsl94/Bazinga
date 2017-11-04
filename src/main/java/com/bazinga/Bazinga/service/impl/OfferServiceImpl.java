@@ -20,10 +20,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class OfferServiceImpl implements OfferService{
@@ -93,6 +90,44 @@ public class OfferServiceImpl implements OfferService{
         response.setSkills(new ArrayList<>(result.getSkills()));
         response.setUserId(result.getUser().getId());
         response.setMinYearsOfExperience(result.getMinYearsOfExperience());
+
+        return response;
+    }
+
+    @Override
+    public List<CreateOfferResponseDTO> getCompaniesOffers() throws OfferException {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+
+        // First do validation
+        // Check if user exist
+        User user = userRepository.findByUsernameIgnoreCase(username);
+        if (user == null) {
+            throw new OfferException(ErrorCode.USER_NOT_FOUND, "User with that id not found");
+        }
+        // Check if user is COMPANY
+        Authority authority = new Authority();
+        authority.setName(AuthoritiesConstants.COMPANY);
+        if (!user.getAuthorities().contains(authority)) {
+            throw new OfferException(ErrorCode.USER_IS_NOT_COMPANY, "User is not company");
+        }
+
+        List<CreateOfferResponseDTO> response = new ArrayList<>();
+
+        List<Offer> offers = user.getOffers();
+        for (Offer offer : offers) {
+            CreateOfferResponseDTO offerResponse  = new CreateOfferResponseDTO();
+            offerResponse.setTitle(offer.getTitle());
+            offerResponse.setActive(offer.getActive());
+            offerResponse.setDescription(offer.getDescription());
+            offerResponse.setLocations(Arrays.asList(offer.getLocations().split("\\s*,\\s*")));
+            offerResponse.setMinimumEducation(offer.getMinimumLevel());
+            offerResponse.setSkills(new ArrayList<>(offer.getSkills()));
+            offerResponse.setUserId(offer.getUser().getId());
+            offerResponse.setMinYearsOfExperience(offer.getMinYearsOfExperience());
+
+            response.add(offerResponse);
+        }
 
         return response;
     }
