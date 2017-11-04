@@ -50,7 +50,7 @@ public class User {
     @BatchSize(size = 20)
     private Set<Experience> experiences;
 
-    @OneToOne(mappedBy = "user")
+    @OneToOne
     private Education education;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "user")

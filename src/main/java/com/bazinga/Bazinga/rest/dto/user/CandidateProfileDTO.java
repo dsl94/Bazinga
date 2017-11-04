@@ -3,6 +3,8 @@ package com.bazinga.Bazinga.rest.dto.user;
 import com.bazinga.Bazinga.model.Education;
 import com.bazinga.Bazinga.model.Experience;
 import com.bazinga.Bazinga.model.Skill;
+import com.bazinga.Bazinga.rest.dto.education.ResponseEducationDTO;
+import com.bazinga.Bazinga.rest.dto.experience.ResponseExperienceDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,6 +21,6 @@ public class CandidateProfileDTO {
     private String name;
     private String email;
     private Set<Skill> userSkills;
-    private Set<Experience> userExperience;
-    private Education userEducation;
+    private Set<ResponseExperienceDTO> userExperience;
+    private ResponseEducationDTO userEducation;
 }

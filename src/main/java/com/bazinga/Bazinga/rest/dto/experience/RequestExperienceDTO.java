@@ -5,7 +5,6 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 /**
  * Created by DjordjeZiga on 04/11/2017.

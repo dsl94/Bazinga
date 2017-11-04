@@ -1,5 +1,6 @@
 package com.bazinga.Bazinga.rest.dto.education;
 
+import com.bazinga.Bazinga.model.EducationLevel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -15,4 +16,5 @@ public class ResponseEducationDTO {
     private String school;
     private String startDate;
     private String endDate;
+    private EducationLevel level;
 }

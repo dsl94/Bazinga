@@ -26,6 +26,7 @@ public class EducationMapper {
         responseEducationDTO.setSchool(education.getSchool());
         responseEducationDTO.setStartDate(education.getStartDate().toString());
         responseEducationDTO.setEndDate(education.getEndDate().toString());
+        responseEducationDTO.setLevel(education.getLevel());
         return responseEducationDTO;
     }
 }

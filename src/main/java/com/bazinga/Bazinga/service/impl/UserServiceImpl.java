@@ -11,11 +11,13 @@ import com.bazinga.Bazinga.repository.ExperienceRepository;
 import com.bazinga.Bazinga.repository.SkillRepository;
 import com.bazinga.Bazinga.repository.UserRepository;
 import com.bazinga.Bazinga.rest.dto.experience.RequestExperienceDTO;
+import com.bazinga.Bazinga.rest.dto.experience.ResponseExperienceDTO;
 import com.bazinga.Bazinga.rest.dto.user.CandidateProfileDTO;
 import com.bazinga.Bazinga.rest.dto.user.RegisterUserDTO;
 import com.bazinga.Bazinga.rest.dto.user.RegisterUserResponseDTO;
 import com.bazinga.Bazinga.rest.dto.user.UserEducationRequestDTO;
 import com.bazinga.Bazinga.service.UserService;
+import com.bazinga.Bazinga.util.EducationMapper;
 import com.bazinga.Bazinga.util.ExperienceMapper;
 import com.bazinga.Bazinga.util.UserMapper;
 import org.apache.commons.lang3.StringUtils;
@@ -50,6 +52,9 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private ExperienceRepository experienceRepository;
 
+    @Autowired
+    private EducationMapper educationMapper;
+
     @Override
     public RegisterUserResponseDTO register(RegisterUserDTO request) throws UserException {
 
@@ -82,8 +87,12 @@ public class UserServiceImpl implements UserService {
             profileDTO.setName(user.getName());
             profileDTO.setUsername(user.getUsername());
             profileDTO.setUserSkills(user.getUserSkills());
-            profileDTO.setUserEducation(user.getEducation());
-            profileDTO.setUserExperience(user.getExperiences());
+            profileDTO.setUserEducation(educationMapper.mapResponseToDTO(user.getEducation()));
+            Set<ResponseExperienceDTO> responseExperienceDTOs=new HashSet<>();
+            for (Experience experience:user.getExperiences()){
+                responseExperienceDTOs.add(experienceMapper.mapFromEntity(experience));
+            }
+            profileDTO.setUserExperience(responseExperienceDTOs);
 
             return profileDTO;
         } else {
