@@ -29,7 +29,8 @@ public class ExperienceMapper {
         responseExperienceDTO.setCompanyName(experience.getCompanyName());
         responseExperienceDTO.setRoleInCompany(experience.getRoleInCompany());
         responseExperienceDTO.setStartDate(experience.getStartDate().toString());
-        responseExperienceDTO.setEndDate(experience.getEndDate().toString());
+        if (experience.getEndDate() != null)
+            responseExperienceDTO.setEndDate(experience.getEndDate().toString());
 
         return responseExperienceDTO;
     }
