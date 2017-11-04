@@ -67,11 +67,20 @@ public class UserController extends BaseController{
 
     @RequestMapping(value = "/candidate/education", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     private ResponseEntity registerUser(@Valid @RequestBody UserEducationRequestDTO requestDTO) {
-
         try {
             return ResponseEntity.ok().body(userService.addEducation(requestDTO));
         } catch (UserException e) {
             return ResponseEntity.badRequest().body(new ErrorMessage(e.getErrorCode(), e.getErrorMessage()));
         }
     }
+
+    @RequestMapping(value = "/candidate/locations", method = RequestMethod.POST)
+    private ResponseEntity addLocations(@RequestBody List<String> locations){
+        try {
+            return response(userService.addLocations(locations));
+        } catch (UserException e) {
+            return responseBad(new ErrorMessage(e.getErrorCode(), e.getErrorMessage()));
+        }
+    }
+
 }

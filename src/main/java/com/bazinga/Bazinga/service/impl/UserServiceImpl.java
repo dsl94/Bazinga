@@ -2,7 +2,10 @@ package com.bazinga.Bazinga.service.impl;
 
 import com.bazinga.Bazinga.error.ErrorCode;
 import com.bazinga.Bazinga.error.UserException;
-import com.bazinga.Bazinga.model.*;
+import com.bazinga.Bazinga.model.Education;
+import com.bazinga.Bazinga.model.Experience;
+import com.bazinga.Bazinga.model.Skill;
+import com.bazinga.Bazinga.model.User;
 import com.bazinga.Bazinga.repository.EducationRepository;
 import com.bazinga.Bazinga.repository.ExperienceRepository;
 import com.bazinga.Bazinga.repository.SkillRepository;
@@ -11,29 +14,26 @@ import com.bazinga.Bazinga.rest.dto.experience.RequestExperienceDTO;
 import com.bazinga.Bazinga.rest.dto.user.CandidateProfileDTO;
 import com.bazinga.Bazinga.rest.dto.user.RegisterUserDTO;
 import com.bazinga.Bazinga.rest.dto.user.RegisterUserResponseDTO;
-import com.bazinga.Bazinga.security.AuthoritiesConstants;
 import com.bazinga.Bazinga.rest.dto.user.UserEducationRequestDTO;
 import com.bazinga.Bazinga.service.UserService;
 import com.bazinga.Bazinga.util.ExperienceMapper;
 import com.bazinga.Bazinga.util.UserMapper;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepository;
-
-    @Autowired
-    private ExperienceRepository experienceRepository;
 
     @Autowired
     private UserMapper userMapper;
@@ -96,6 +96,7 @@ public class UserServiceImpl implements UserService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
         User user = userRepository.findByUsernameIgnoreCase(username);
+        user.getExperiences().clear();
         if(user != null){
             for(RequestExperienceDTO experienceDTO : userExperiences){
                 Experience experience = experienceMapper.mapFromRequest(experienceDTO);
@@ -108,6 +109,24 @@ public class UserServiceImpl implements UserService {
         }
 
         return getCandidateProfile();
+    }
+
+    @Override
+    public CandidateProfileDTO addLocations(List<String> locations) throws UserException {
+        String locationsFormatted = StringUtils.join(locations, ",");
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        User user = userRepository.findByUsernameIgnoreCase(username);
+        if(user != null){
+            user.setLocations(locationsFormatted);
+            userRepository.save(user);
+            return getCandidateProfile();
+        } else {
+            throw new UserException(ErrorCode.USER_NOT_FOUND, "User not found");
+        }
+
+
     }
 
     @Override
