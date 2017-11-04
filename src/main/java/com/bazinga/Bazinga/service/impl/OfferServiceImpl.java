@@ -14,6 +14,7 @@ import com.bazinga.Bazinga.rest.dto.offer.CreateOfferResponseDTO;
 import com.bazinga.Bazinga.security.AuthoritiesConstants;
 import com.bazinga.Bazinga.service.OfferService;
 import com.bazinga.Bazinga.service.UserService;
+import com.bazinga.Bazinga.util.OfferMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -21,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class OfferServiceImpl implements OfferService{
@@ -33,6 +35,9 @@ public class OfferServiceImpl implements OfferService{
 
     @Autowired
     private SkillRepository skillRepository;
+
+    @Autowired
+    private OfferMapper mapper;
 
     @Override
     public CreateOfferResponseDTO createOffer(CreateOfferRequestDTO request) throws OfferException {
@@ -52,15 +57,8 @@ public class OfferServiceImpl implements OfferService{
             throw new OfferException(ErrorCode.USER_IS_NOT_COMPANY, "User is not company and can't create offer");
         }
 
-        Offer forSave = new Offer();
-        forSave.setTitle(request.getTitle());
-        forSave.setActive(true);
+        Offer forSave = mapper.fromRequest(request);
         forSave.setUser(user);
-        forSave.setMinimumLevel(request.getMinimumLevel());
-        String locations = StringUtils.join(request.getLocations(), ",");
-        forSave.setLocations(locations);
-        forSave.setDescription(request.getDescription());
-        forSave.setMinYearsOfExperience(request.getMinYearsOfExperience());
 
         // Now map skills
         Set<Skill> skills = new HashSet<>();
@@ -81,17 +79,23 @@ public class OfferServiceImpl implements OfferService{
 
         Offer result = offerRepository.save(forSave);
 
-        CreateOfferResponseDTO response = new CreateOfferResponseDTO();
-        response.setTitle(result.getTitle());
-        response.setActive(result.getActive());
-        response.setDescription(result.getDescription());
-        response.setLocations(Arrays.asList(result.getLocations().split("\\s*,\\s*")));
-        response.setMinimumEducation(result.getMinimumLevel());
-        response.setSkills(new ArrayList<>(result.getSkills()));
-        response.setUserId(result.getUser().getId());
-        response.setMinYearsOfExperience(result.getMinYearsOfExperience());
+        return mapper.fromEntity(result);
+    }
 
-        return response;
+    @Override
+    public CreateOfferResponseDTO updateOffer(CreateOfferRequestDTO request, Long id) throws OfferException {
+        Offer offer = offerRepository.findOne(id);
+        if (offer == null) {
+            throw new OfferException(ErrorCode.OFFER_NOT_FOUND, "Offer with id not found");
+        }
+
+        Offer newOffer = mapper.fromRequest(request);
+        newOffer.setId(offer.getId());
+        newOffer.setUser(offer.getUser());
+
+        Offer result = offerRepository.save(newOffer);
+
+        return mapper.fromEntity(result);
     }
 
     @Override
@@ -112,22 +116,10 @@ public class OfferServiceImpl implements OfferService{
             throw new OfferException(ErrorCode.USER_IS_NOT_COMPANY, "User is not company");
         }
 
-        List<CreateOfferResponseDTO> response = new ArrayList<>();
+        List<CreateOfferResponseDTO> response;
 
         List<Offer> offers = user.getOffers();
-        for (Offer offer : offers) {
-            CreateOfferResponseDTO offerResponse  = new CreateOfferResponseDTO();
-            offerResponse.setTitle(offer.getTitle());
-            offerResponse.setActive(offer.getActive());
-            offerResponse.setDescription(offer.getDescription());
-            offerResponse.setLocations(Arrays.asList(offer.getLocations().split("\\s*,\\s*")));
-            offerResponse.setMinimumEducation(offer.getMinimumLevel());
-            offerResponse.setSkills(new ArrayList<>(offer.getSkills()));
-            offerResponse.setUserId(offer.getUser().getId());
-            offerResponse.setMinYearsOfExperience(offer.getMinYearsOfExperience());
-
-            response.add(offerResponse);
-        }
+        response = offers.stream().map(offer -> mapper.fromEntity(offer)).collect(Collectors.toList());
 
         return response;
     }

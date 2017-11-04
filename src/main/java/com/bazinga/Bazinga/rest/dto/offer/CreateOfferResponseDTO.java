@@ -12,6 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CreateOfferResponseDTO {
+    private Long offerId;
     private Long userId;
     private boolean active;
     private String title;
