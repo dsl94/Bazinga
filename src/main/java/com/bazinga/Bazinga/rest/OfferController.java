@@ -14,7 +14,7 @@ import javax.websocket.server.PathParam;
 
 @RestController
 @RequestMapping("/api/company")
-public class OfferController {
+public class OfferController extends BaseController{
 
     @Autowired
     private OfferService offerService;
@@ -41,6 +41,16 @@ public class OfferController {
     public ResponseEntity updateOffer(@Valid @RequestBody CreateOfferRequestDTO requestDTO, @PathVariable(value = "id") Long id) {
         try {
             return ResponseEntity.ok(offerService.updateOffer(requestDTO, id));
+        } catch (OfferException e) {
+            return ResponseEntity.badRequest().body(new ErrorMessage(e.getErrorCode(), e.getErrorMessage()));
+        }
+    }
+
+    @RequestMapping(value = "/offer/flag/{id}", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity flagAsInactive(@PathVariable(value = "id") Long id){
+        try {
+            offerService.flag(id);
+            return responseNoContent();
         } catch (OfferException e) {
             return ResponseEntity.badRequest().body(new ErrorMessage(e.getErrorCode(), e.getErrorMessage()));
         }

@@ -99,6 +99,21 @@ public class OfferServiceImpl implements OfferService{
     }
 
     @Override
+    public void flag(Long id) throws OfferException {
+        Offer offer = offerRepository.findOne(id);
+        if (offer == null) {
+            throw new OfferException(ErrorCode.OFFER_NOT_FOUND, "Offer with that ID not found");
+        }
+
+        if (!offer.getActive()) {
+            throw new OfferException(ErrorCode.OFFER_IS_ALREADY_INACTIVE, "Offer is already inactive");
+        }
+
+        offer.setActive(false);
+        offerRepository.save(offer);
+    }
+
+    @Override
     public List<CreateOfferResponseDTO> getCompaniesOffers() throws OfferException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();

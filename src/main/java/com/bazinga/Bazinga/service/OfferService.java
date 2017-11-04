@@ -12,4 +12,5 @@ public interface OfferService {
     CreateOfferResponseDTO createOffer(CreateOfferRequestDTO request) throws OfferException;
     List<CreateOfferResponseDTO> getCompaniesOffers() throws OfferException;
     CreateOfferResponseDTO updateOffer(CreateOfferRequestDTO request, Long id) throws OfferException;
+    void flag(Long id) throws OfferException;
 }
