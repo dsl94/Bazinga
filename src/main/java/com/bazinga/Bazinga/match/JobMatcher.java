@@ -1,5 +1,6 @@
 package com.bazinga.Bazinga.match;
 
+import com.bazinga.Bazinga.match.model.SkillMatcherResponse;
 import com.bazinga.Bazinga.model.Offer;
 import com.bazinga.Bazinga.model.User;
 import com.bazinga.Bazinga.repository.OfferRepository;
@@ -24,6 +25,9 @@ public class JobMatcher {
     @Autowired
     private OfferRepository offerRepository;
 
+    @Autowired
+    private SkillMatcher skillMatcher;
+
     @Scheduled(fixedRate = 60000)
     public void doMatch() {
         // We have to do matching for every user and for every offer for every user
@@ -31,11 +35,14 @@ public class JobMatcher {
         List<User> users = userRepository.findAll();
         List<Offer> offers = offerRepository.findAllByActive(true);
 
-        for (User user : users) {
-            for (Offer offer : offers) {
-                // Now we do match for all matchers
+        for (Offer offer : offers) {
+            for (User user : users) {
                 if (matchersMatched(user, offer)) {
-                    // Now we check skills
+                    // Now we check skills matching
+                    SkillMatcherResponse skillMatcherResponse = skillMatcher.match(user, offer);
+                    if (skillMatcherResponse.getMatchedPercentage() >= 30) {
+                        // This is complete match and we can save it in DB
+                    }
                 }
             }
         }
