@@ -24,8 +24,12 @@ public class EducationMapper {
         ResponseEducationDTO responseEducationDTO = new ResponseEducationDTO();
         responseEducationDTO.setId(education.getId());
         responseEducationDTO.setSchool(education.getSchool());
-        responseEducationDTO.setStartDate(education.getStartDate().toString());
-        responseEducationDTO.setEndDate(education.getEndDate().toString());
+        if (education.getStartDate() != null) {
+            responseEducationDTO.setStartDate(education.getStartDate().toString());
+        }
+        if (education.getEndDate() != null) {
+            responseEducationDTO.setEndDate(education.getEndDate().toString());
+        }
         responseEducationDTO.setLevel(education.getLevel());
         return responseEducationDTO;
     }
