@@ -2,11 +2,14 @@ package com.bazinga.Bazinga.service.impl;
 
 import com.bazinga.Bazinga.error.ErrorCode;
 import com.bazinga.Bazinga.error.UserException;
+import com.bazinga.Bazinga.model.Education;
 import com.bazinga.Bazinga.model.User;
+import com.bazinga.Bazinga.repository.EducationRepository;
 import com.bazinga.Bazinga.repository.UserRepository;
 import com.bazinga.Bazinga.rest.dto.user.CandidateProfileDTO;
 import com.bazinga.Bazinga.rest.dto.user.RegisterUserDTO;
 import com.bazinga.Bazinga.rest.dto.user.RegisterUserResponseDTO;
+import com.bazinga.Bazinga.rest.dto.user.UserEducationRequestDTO;
 import com.bazinga.Bazinga.service.UserService;
 import com.bazinga.Bazinga.util.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +28,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private EducationRepository educationRepository;
 
     @Override
     public RegisterUserResponseDTO register(RegisterUserDTO request) throws UserException {
@@ -62,6 +68,34 @@ public class UserServiceImpl implements UserService {
             profileDTO.setUserExperience(user.getExperiences());
 
             return profileDTO;
+        } else {
+            throw new UserException(ErrorCode.USER_NOT_FOUND, "User not found");
+        }
+    }
+
+    @Override
+    public CandidateProfileDTO addEducation(UserEducationRequestDTO request) throws UserException {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+
+        User user = userRepository.findByUsernameIgnoreCase(username);
+        if (user != null) {
+            // Check if user have education
+            if (user.getEducation() != null) {
+                throw new UserException(ErrorCode.EDUCATION_EXIST, "User already have education, please edit that one");
+            } else {
+                Education education = new Education();
+                education.setSchool(request.getSchool());
+                education.setEndDate(request.getEndDate());
+                education.setStartDate(request.getStartDate());
+                education.setUser(user);
+                education.setLevel(request.getLevel());
+
+                Education res = educationRepository.save(education);
+                user.setEducation(res);
+                userRepository.save(user);
+                return this.getCandidateProfile();
+            }
         } else {
             throw new UserException(ErrorCode.USER_NOT_FOUND, "User not found");
         }

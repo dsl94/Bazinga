@@ -5,5 +5,6 @@ public enum ErrorCode {
     USERNAME_EXIST,
     EMAIL_EXIST,
     USER_NOT_FOUND,
-    USER_IS_NOT_CPMPANY
+    USER_IS_NOT_COMPANY,
+    EDUCATION_EXIST
 }
