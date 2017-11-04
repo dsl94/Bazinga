@@ -1,7 +1,7 @@
 package com.bazinga.Bazinga.model;
 
 public enum EducationLevel {
-    STUDENT,
+    OTHER,
     BSC,
     MSC,
     PHD
