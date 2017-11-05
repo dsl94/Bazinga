@@ -31,9 +31,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable().authorizeRequests()
                 .antMatchers("/api/register").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/login").permitAll()
-                .antMatchers("/api/company/*").hasAnyAuthority("ROLE_COMPANY")
+                .antMatchers("/api/company/**").hasAnyAuthority("ROLE_COMPANY")
                 .antMatchers("/api/candidate/*").hasAnyAuthority("ROLE_CANDIDATE")
-                .antMatchers("/api/skill/*").authenticated()
+                .antMatchers("/api/skill/**").authenticated()
                 .and()
                 .addFilterBefore(new JWTLoginFilter("/api/login", authenticationManager()),
                         UsernamePasswordAuthenticationFilter.class)

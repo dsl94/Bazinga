@@ -31,8 +31,8 @@ public class Offer {
     private EducationLevel minimumLevel;
     private Integer minYearsOfExperience;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "offer")
-    private List<Match> matches;
+    /*@OneToOne
+    private List<Match> matches;*/
 
     @JsonIgnore
     @ManyToMany(fetch = FetchType.EAGER)
@@ -41,4 +41,9 @@ public class Offer {
             joinColumns = {@JoinColumn(name = "offer_id", referencedColumnName = "id")},
             inverseJoinColumns = {@JoinColumn(name = "skill_id", referencedColumnName = "id")})
     private Set<Skill> skills = new HashSet<>();
+
+    @Override
+    public String toString(){
+        return id.toString();
+    }
 }

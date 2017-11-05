@@ -19,6 +19,7 @@ public class Match implements Comparable<Match>{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
     @ManyToOne
     @JoinColumn(name="user_id",nullable = false)
     private User user;
@@ -26,6 +27,7 @@ public class Match implements Comparable<Match>{
     @ManyToOne
     @JoinColumn(name="offer_id", nullable=false)
     private Offer offer;
+
     private double skillPercentage;
 
     @ElementCollection
@@ -46,4 +48,9 @@ public class Match implements Comparable<Match>{
             return 0;
         }
     }
+    @Override
+    public String toString(){
+        return id.toString();
+    }
+
 }

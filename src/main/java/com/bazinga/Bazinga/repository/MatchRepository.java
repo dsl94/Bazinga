@@ -12,5 +12,6 @@ import java.util.List;
 public interface MatchRepository extends JpaRepository<Match,Long>{
 
     void deleteByOffer(Offer offer);
+    List<Match> findByOffer(Offer offer);
 
 }

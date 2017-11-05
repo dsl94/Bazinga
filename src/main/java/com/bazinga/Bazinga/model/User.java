@@ -14,7 +14,8 @@ import java.util.Set;
 @Data
 @NoArgsConstructor
 @Table(name = "users")
-public class User {
+public class
+User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO )
@@ -53,11 +54,15 @@ public class User {
     @OneToOne
     private Education education;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
+    @OneToMany(mappedBy = "user")
     private List<Offer> offers;
 
     @OneToMany(mappedBy = "user")
     private List<Match> matches;
 
+    @Override
+    public String toString(){
+        return id.toString();
+    }
 
 }
