@@ -10,6 +10,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.*;
 
 @Service
@@ -32,25 +33,26 @@ public class JobMatcher {
     private MatchRepository matchRepository;
 
     @Scheduled(fixedRate = 60000)
+    @Transactional
     public void doMatch() {
         // We have to do matching for every user and for every offer for every user
         // So first we are starting users
         List<User> users = userRepository.findAll();
         List<Offer> offers = offerRepository.findAllByActive(true);
         for (Offer offer : offers) {
-            List<Match> matches=new ArrayList<>();
+            List<Match> matches = new ArrayList<>();
             for (User user : users) {
                 if (matchersMatched(user, offer)) {
                     // Now we check skills matching
                     SkillMatcherResponse skillMatcherResponse = skillMatcher.match(user, offer);
                     if (skillMatcherResponse.getMatchedPercentage() >= 30) {
-                        Set<MatchedSkills> listMatchedSkills=new HashSet<>();
-                        for (Skill skill:skillMatcherResponse.getMatchedSkills()){
-                            MatchedSkills matchedSkills=new MatchedSkills();
+                        Set<MatchedSkills> listMatchedSkills = new HashSet<>();
+                        for (Skill skill : skillMatcherResponse.getMatchedSkills()) {
+                            MatchedSkills matchedSkills = new MatchedSkills();
                             matchedSkills.setSkill(skill);
                             listMatchedSkills.add(matchedSkills);
                         }
-                        Match match=new Match();
+                        Match match = new Match();
                         match.setUser(user);
                         match.setOffer(offer);
                         match.setSkillPercentage(skillMatcherResponse.getMatchedPercentage());
@@ -59,9 +61,13 @@ public class JobMatcher {
                     }
                 }
             }
-            Collections.sort(matches);
             matchRepository.deleteByOffer(offer);
-            matchRepository.save(matches.subList(0,4));
+            if (matches.size() < 5) {
+                matchRepository.save(matches);
+            } else {
+                Collections.sort(matches);
+                matchRepository.save(matches.subList(0, 4));
+            }
         }
     }
 

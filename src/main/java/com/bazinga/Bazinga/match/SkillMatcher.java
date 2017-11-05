@@ -28,7 +28,7 @@ public class SkillMatcher {
 
         SkillMatcherResponse skillMatcherResponse = new SkillMatcherResponse();
         skillMatcherResponse.setMatchedSkills(matchedSkills);
-        skillMatcherResponse.setMatchedPercentage((double)offerSkillNumber / 100 * matchedSkills.size());
+        skillMatcherResponse.setMatchedPercentage(((double) 100/offerSkillNumber  * matchedSkills.size()));
 
         return skillMatcherResponse;
     }

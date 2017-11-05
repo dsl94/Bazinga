@@ -75,7 +75,7 @@ public class UserServiceImpl implements UserService {
         // First do validation
         // Check if user exist
         User user = userRepository.findByUsernameIgnoreCase(username);
-        if (user != null){
+            if (user != null){
             CandidateProfileDTO profileDTO = new CandidateProfileDTO();
             profileDTO.setId(user.getId());
             profileDTO.setEmail(user.getEmail());
@@ -96,6 +96,7 @@ public class UserServiceImpl implements UserService {
             profileDTO.setLocations(locations);
 
             profileDTO.setUserExperience(responseExperienceDTOs);
+
 
             return profileDTO;
         } else {
@@ -205,6 +206,7 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findByUsernameIgnoreCase(username);
 
         if(user != null){
+            educationRepository.save(educationMapper.mapRequestToEntity(requestEducationDTO));
             user.setEducation(educationMapper.mapRequestToEntity(requestEducationDTO));
             userRepository.save(user);
             return getCandidateProfile();

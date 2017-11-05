@@ -16,6 +16,9 @@ import java.util.List;
 public class LocationMatcher implements Matcher {
     @Override
     public boolean match(User user, Offer offer) {
+        if (user.getLocations()==null){
+            return false;
+        }
         List<String> offerLocations= Arrays.asList(offer.getLocations().split(","));
         for (String offerLocation:offerLocations){
             if (user.getLocations().toLowerCase().contains(offerLocation.toLowerCase())){
