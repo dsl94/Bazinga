@@ -27,10 +27,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -95,9 +92,10 @@ public class UserServiceImpl implements UserService {
                 responseExperienceDTOs.add(experienceMapper.mapFromEntity(experience));
             }
             List<String> locations = new ArrayList<>();
-            for(String location : user.getLocations().split(",")){
-                locations.add(location);
+            if (user.getLocations() != null) {
+                Collections.addAll(locations, user.getLocations().split(","));
             }
+
             profileDTO.setLocations(locations);
 
             profileDTO.setUserExperience(responseExperienceDTOs);
