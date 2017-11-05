@@ -10,6 +10,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -23,4 +24,5 @@ public class CandidateProfileDTO {
     private Set<Skill> userSkills;
     private Set<ResponseExperienceDTO> userExperience;
     private ResponseEducationDTO userEducation;
+    private List<String> locations;
 }

@@ -85,7 +85,7 @@ public class UserController extends BaseController{
     }
 
     @RequestMapping(value = "/candidate/locations", method = RequestMethod.POST)
-    private ResponseEntity addLocations(@RequestBody List<String> locations){
+    private ResponseEntity addLocations(@RequestBody List<String> locations) {
         try {
             return response(userService.addLocations(locations));
         } catch (UserException e) {
