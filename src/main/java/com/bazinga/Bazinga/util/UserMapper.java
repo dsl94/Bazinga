@@ -2,6 +2,7 @@ package com.bazinga.Bazinga.util;
 
 import com.bazinga.Bazinga.model.Authority;
 import com.bazinga.Bazinga.model.User;
+import com.bazinga.Bazinga.rest.dto.user.CompanyProfileDTO;
 import com.bazinga.Bazinga.rest.dto.user.RegisterUserDTO;
 import com.bazinga.Bazinga.rest.dto.user.RegisterUserResponseDTO;
 import com.bazinga.Bazinga.rest.dto.user.UserEducationRequestDTO;
@@ -47,5 +48,14 @@ public class UserMapper {
         userResponseDTO.setUsername(user.getUsername());
 
         return userResponseDTO;
+    }
+
+    public CompanyProfileDTO mapUserToDTO(User user){
+        CompanyProfileDTO companyProfileDTO = new CompanyProfileDTO();
+        companyProfileDTO.setId(user.getId());
+        companyProfileDTO.setName(user.getName());
+        companyProfileDTO.setUsername(user.getUsername());
+        companyProfileDTO.setEmail(user.getEmail());
+        return companyProfileDTO;
     }
 }

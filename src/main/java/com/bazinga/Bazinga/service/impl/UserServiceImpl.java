@@ -13,10 +13,7 @@ import com.bazinga.Bazinga.repository.UserRepository;
 import com.bazinga.Bazinga.rest.dto.education.RequestEducationDTO;
 import com.bazinga.Bazinga.rest.dto.experience.RequestExperienceDTO;
 import com.bazinga.Bazinga.rest.dto.experience.ResponseExperienceDTO;
-import com.bazinga.Bazinga.rest.dto.user.CandidateProfileDTO;
-import com.bazinga.Bazinga.rest.dto.user.RegisterUserDTO;
-import com.bazinga.Bazinga.rest.dto.user.RegisterUserResponseDTO;
-import com.bazinga.Bazinga.rest.dto.user.UserEducationRequestDTO;
+import com.bazinga.Bazinga.rest.dto.user.*;
 import com.bazinga.Bazinga.service.UserService;
 import com.bazinga.Bazinga.util.EducationMapper;
 import com.bazinga.Bazinga.util.ExperienceMapper;
@@ -211,6 +208,20 @@ public class UserServiceImpl implements UserService {
             user.setEducation(educationMapper.mapRequestToEntity(requestEducationDTO));
             userRepository.save(user);
             return getCandidateProfile();
+        } else {
+            throw new UserException(ErrorCode.USER_NOT_FOUND, "User not found");
+        }
+    }
+
+    @Override
+    public CompanyProfileDTO getCompanyProfile() throws UserException {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+
+        User user = userRepository.findByUsernameIgnoreCase(username);
+        if(user != null){
+            CompanyProfileDTO companyProfileDTO = userMapper.mapUserToDTO(user);
+            return companyProfileDTO;
         } else {
             throw new UserException(ErrorCode.USER_NOT_FOUND, "User not found");
         }

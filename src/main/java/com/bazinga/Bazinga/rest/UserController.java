@@ -38,7 +38,7 @@ public class UserController extends BaseController{
     }
 
     @RequestMapping(value = "/candidate/profile",  method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    private ResponseEntity getCandidateProfile(@PathParam(value = "id") Long id){
+    private ResponseEntity getCandidateProfile(){
 
         try {
             return ResponseEntity.ok(userService.getCandidateProfile());
@@ -88,6 +88,15 @@ public class UserController extends BaseController{
     private ResponseEntity addLocations(@RequestBody List<String> locations) {
         try {
             return response(userService.addLocations(locations));
+        } catch (UserException e) {
+            return responseBad(new ErrorMessage(e.getErrorCode(), e.getErrorMessage()));
+        }
+    }
+
+    @RequestMapping(value = "/company/profile")
+    private ResponseEntity getCompanyProfile(){
+        try {
+            return response(userService.getCompanyProfile());
         } catch (UserException e) {
             return responseBad(new ErrorMessage(e.getErrorCode(), e.getErrorMessage()));
         }
