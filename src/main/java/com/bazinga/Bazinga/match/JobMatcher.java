@@ -1,8 +1,8 @@
 package com.bazinga.Bazinga.match;
 
 import com.bazinga.Bazinga.match.model.SkillMatcherResponse;
-import com.bazinga.Bazinga.model.Offer;
-import com.bazinga.Bazinga.model.User;
+import com.bazinga.Bazinga.model.*;
+import com.bazinga.Bazinga.repository.MatchRepository;
 import com.bazinga.Bazinga.repository.OfferRepository;
 import com.bazinga.Bazinga.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +10,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.*;
 
 @Service
 @EnableScheduling
@@ -28,23 +28,40 @@ public class JobMatcher {
     @Autowired
     private SkillMatcher skillMatcher;
 
+    @Autowired
+    private MatchRepository matchRepository;
+
     @Scheduled(fixedRate = 60000)
     public void doMatch() {
         // We have to do matching for every user and for every offer for every user
         // So first we are starting users
         List<User> users = userRepository.findAll();
         List<Offer> offers = offerRepository.findAllByActive(true);
-
         for (Offer offer : offers) {
+            List<Match> matches=new ArrayList<>();
             for (User user : users) {
                 if (matchersMatched(user, offer)) {
                     // Now we check skills matching
                     SkillMatcherResponse skillMatcherResponse = skillMatcher.match(user, offer);
                     if (skillMatcherResponse.getMatchedPercentage() >= 30) {
-                        // This is complete match and we can save it in DB
+                        Set<MatchedSkills> listMatchedSkills=new HashSet<>();
+                        for (Skill skill:skillMatcherResponse.getMatchedSkills()){
+                            MatchedSkills matchedSkills=new MatchedSkills();
+                            matchedSkills.setSkill(skill);
+                            listMatchedSkills.add(matchedSkills);
+                        }
+                        Match match=new Match();
+                        match.setUser(user);
+                        match.setOffer(offer);
+                        match.setSkillPercentage(skillMatcherResponse.getMatchedPercentage());
+                        match.setMatchedSkills(listMatchedSkills);
+                        matches.add(match);
                     }
                 }
             }
+            Collections.sort(matches);
+            matchRepository.deleteByOffer(offer);
+            matchRepository.save(matches.subList(0,4));
         }
     }
 
