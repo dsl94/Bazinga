@@ -16,14 +16,19 @@ public class EducationMatcher implements Matcher {
         EducationLevel minimum = offer.getMinimumLevel();
 
         Education education = user.getEducation();
-        EducationLevel usersLevel = education.getLevel();
+        if (education != null) {
+            EducationLevel usersLevel = education.getLevel();
 
 
-        if (usersLevel.equals(EducationLevel.BSC)) {
-            return minimum.equals(EducationLevel.BSC);
-        } else if (usersLevel.equals(EducationLevel.MSC)) {
-            return minimum.equals(EducationLevel.BSC) || minimum.equals(EducationLevel.MSC);
-        } else
-            return usersLevel.equals(EducationLevel.PHD) || usersLevel.equals(EducationLevel.OTHER) && minimum.equals(EducationLevel.OTHER);
+            if (usersLevel.equals(EducationLevel.BSC)) {
+                return minimum.equals(EducationLevel.BSC);
+            } else if (usersLevel.equals(EducationLevel.MSC)) {
+                return minimum.equals(EducationLevel.BSC) || minimum.equals(EducationLevel.MSC);
+            } else
+                return usersLevel.equals(EducationLevel.PHD) || usersLevel.equals(EducationLevel.OTHER) && minimum.equals(EducationLevel.OTHER);
+        } else {
+            return minimum.equals(EducationLevel.OTHER);
+        }
+
     }
 }

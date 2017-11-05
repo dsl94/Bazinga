@@ -56,5 +56,8 @@ public class User {
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
     private List<Offer> offers;
 
+    @OneToMany(mappedBy = "user")
+    private List<Match> matches;
+
 
 }

@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -29,6 +30,9 @@ public class Offer {
     private String description;
     private EducationLevel minimumLevel;
     private Integer minYearsOfExperience;
+
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "offer")
+    private List<Match> matches;
 
     @JsonIgnore
     @ManyToMany(fetch = FetchType.EAGER)
